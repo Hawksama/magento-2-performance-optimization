@@ -3,6 +3,7 @@
     "description": "Loads the CSS using RequireJS. This helps to speed up the website by loading CSS using requireJS asynchronously. Production mode required.",
     "type": "magento2-module",
     "license": "GPL-3.0",
+    "version": "1.0.2",
     "authors": [
         {
             "name": "Alexandru-Manuel Carabus",
