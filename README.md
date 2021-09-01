@@ -26,9 +26,8 @@ The production mode is required because in the developer mode the LESS path hint
 
 ### Type 2: Composer
 
- - Install the module composer by running `composer require hawksama/magento-2-performance-optimization`
- - enable the module by running `php bin/magento module:enable Hawksama_PerformanceOptimization`
- - apply database updates by running `php bin/magento setup:upgrade`\*
+ - Install the module composer by running `composer require hawksama/magento-2-performance-optimization
+ - enable and apply database updates by running `php bin/magento setup:upgrade`\*
  - compile the module by running `php bin/magento setup:di:compile`
  - Flush the cache by running `php bin/magento cache:flush`
 
