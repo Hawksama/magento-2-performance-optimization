@@ -1,0 +1,36 @@
+{
+    "name": "hawksama/magento-2-performance-optimization",
+    "description": "Loads the CSS using RequireJS. This helps to speed up the website by loading CSS using requireJS asynchronously. Production mode required.",
+    "type": "magento2-module",
+    "license": "GPL-3.0",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Alexandru-Manuel Carabus",
+            "email": "manue97132@gmail.com"
+        }
+    ],
+    "require": {
+        "magento/framework": "^102.0.3",
+        "php": ">=7.3.0"
+    },
+    "keywords": [
+        "magento 2",
+        "Alexandru Manuel Carabus",
+        "Google Speed",
+        "Speed Optimization",
+        "Performance Optimization",
+        "Loading Speed",
+        "Loading Optimizer",
+        "Speed Optimizer"
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Hawksama\\PerformanceOptimization\\": ""
+        }
+    }
+}

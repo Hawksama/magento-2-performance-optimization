@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<tab id="advanced" translate="label" sortOrder="999">
+			<label>Advanced</label>
+		</tab>
+		<section id="dev" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+			<label>Developer</label>
+			<tab>advanced</tab>
+			<resource>Hawksama_PerformanceOptimization::config_hawksama_PerformanceOptimization</resource>
+			<group id="css" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>CSS Settings</label>
+				<field id="requirejs_css" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>RequireJS CSS</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment><![CDATA[<strong style="color:red">Attention!</strong> Loads the CSS using RequireJS. This helps to speed up the website by loading CSS using requireJS asynchronously. Production mode required.]]></comment>
+				</field>
+			</group>
+		</section>
+	</system>
+</config>
