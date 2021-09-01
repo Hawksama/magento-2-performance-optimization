@@ -42,6 +42,11 @@ The production mode is required because in the developer mode the LESS path hint
 
  - Module enabled by default.
 
+### Activate CSS critical path
+
+ - To enable it run `bin/magento config:set 'dev/css/use_css_critical_path' 1;`
+
+
 ### Production mode
  - To disable it run `php bin/magento config:set 'dev/css/requirejs_css' 0;`
 
