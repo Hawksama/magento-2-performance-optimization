@@ -10,8 +10,8 @@
 
 
 ## Main Functionalities
-This module removes render-blocking CSS files and helps with Google Page Speed results by asynchronously loading CSS using RequireJS.
-Extends the Magento 2.3.3 function Critical CSS to be compatible with the new asynchronously mode to make the first First Contentful Paint faster.
+This module removes render-blocking CSS files and helps with Google Page Speed results by asynchronously loading CSS using RequireJS. <br />
+Extends the Magento 2.3.3 functionality CSS critical path to be compatible with the new asynchronously mode to make the first First Contentful Paint faster. <br />
 The production mode is required because in the developer mode the LESS path hints do not work.
 
 ## Installation
