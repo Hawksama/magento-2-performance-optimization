@@ -7,4 +7,8 @@
             <argument name="filePath" xsi:type="string">Hawksama_PerformanceOptimization::css/critical.css</argument>
         </arguments>
     </type>
+    
+    <type name="Magento\Framework\App\Response\Http">
+		<plugin name="Hawksama_PerformanceOptimization_Plugin_Frontend_Magento_Framework_App_Response_Http" type="Hawksama\PerformanceOptimization\Plugin\Frontend\Magento\Framework\App\Response\Http" sortOrder="10" disabled="false"/>
+	</type>
 </config>

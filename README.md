@@ -40,8 +40,15 @@ The production mode is required because in the developer mode the LESS path hint
 
 ## Configuration
 
+ - Enabled (hawksama_performanceoptimization/general/enabled)
+
+ - Minify Html (hawksama_performanceoptimization/general/minify_html)
+
+ - RequireJS CSS (hawksama_performanceoptimization/general/requirejs_css)
+ 
  - Module enabled by default. CSS critical path recommended.
- - Stores -> Settings -> Configuration -> Advanced -> Developer -> CSS Settings -> RequireJS CSS
+
+ - Stores > Settings > Configuration > HAWKSAMA -> Performance Optimization -> General
 
 ### Activate CSS critical path
 
@@ -52,6 +59,7 @@ The production mode is required because in the developer mode the LESS path hint
  - Helper
 	- Hawksama\PerformanceOptimization\Helper\Data
 
-
+ - Plugin
+	- beforeSendResponse - Magento\Framework\App\Response\Http > Hawksama\PerformanceOptimization\Plugin\Frontend\Magento\Framework\App\Response\Http
 ## Support
 - manue971@icloud.com

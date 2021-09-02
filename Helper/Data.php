@@ -27,6 +27,11 @@ class Data extends AbstractHelper
     protected $scopeConfig;
 
     /**
+     * @var array
+     */
+    protected $configModule;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -36,17 +41,49 @@ class Data extends AbstractHelper
         State $appState,
         ScopeConfigInterface $scopeConfig
     ) {
+        parent::__construct($context);
         $this->_scopeConfig = $scopeConfig;
         $this->_appState = $appState;
-        parent::__construct($context);
+        $this->configModule = $this->getConfig(strtolower($this->_getModuleName()));
     }
 
     /**
      * @return bool
      */
-    public function isEnabled(): bool
+    public function getConfig($configName = '')
     {
-        return $this->_scopeConfig->getValue('dev/css/requirejs_css') ? true : false;
+        if ($configName) {
+            return $this->_scopeConfig->getValue($configName, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        }
+
+        return $this->_scopeConfig;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getConfigModule($configName = '', $value = null)
+    {
+        $values = $this->configModule;
+        
+        if (!$configName){
+            return $values;
+        }
+
+        $config = explode('/', $configName);
+        $end = count($config) - 1;
+
+        foreach ($config as $key => $value) {
+            if (isset($values[$value])) {
+                if ($key == $end) {
+                    $value = $values[$value];
+                } else {
+                    $values = $values[$value];
+                }
+            }
+        }
+
+        return $value;
     }
 
     /**
@@ -70,6 +107,7 @@ class Data extends AbstractHelper
      */
     public function getMode(): bool
     {
+        return true;
         switch ($this->_appState->getMode()) {
             case \Magento\Framework\App\State::MODE_DEFAULT:
             case \Magento\Framework\App\State::MODE_PRODUCTION:

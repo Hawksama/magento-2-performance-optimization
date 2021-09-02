@@ -67,7 +67,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsEnabled()
+    public function dataProviderForTestGetConfig()
     {
         return [
             'Testcase 1' => [
@@ -78,9 +78,30 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderForTestIsEnabled
+     * @dataProvider dataProviderForTestGetConfig
      */
-    public function testIsEnabled(array $prerequisites, array $expectedResult)
+    public function testGetConfig(array $prerequisites, array $expectedResult)
+    {
+        $this->assertEquals($expectedResult['param'], $prerequisites['param']);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForTestGetConfigModule()
+    {
+        return [
+            'Testcase 1' => [
+                'prerequisites' => ['param' => 1],
+                'expectedResult' => ['param' => 1]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderForTestGetConfigModule
+     */
+    public function testGetConfigModule(array $prerequisites, array $expectedResult)
     {
         $this->assertEquals($expectedResult['param'], $prerequisites['param']);
     }

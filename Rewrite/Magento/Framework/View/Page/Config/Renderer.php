@@ -114,8 +114,9 @@ class Renderer extends \Magento\Framework\View\Page\Config\Renderer
     {
         if(
             $this->_helper->getMode() && 
-            $this->_helper->isEnabled() && 
-            $this->_helper->getArea()
+            $this->_helper->getConfigModule('general/enabled') && 
+            $this->_helper->getArea() &&
+            $this->_helper->getConfigModule('general/requirejs_css')
         ) {
             if ($group->getProperties()['content_type'] == 'css') {
                 $groupHtml = $this->renderAssetCssUsingRequireJs($group);
@@ -141,25 +142,35 @@ class Renderer extends \Magento\Framework\View\Page\Config\Renderer
         $attributes = $this->getGroupAttributes($group);
 
         $result = ''; 
+        $cssAttributes = [];
         try {
-            /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
             $result .= <<<TEMPLATE
                 <script type="text/javascript">
-                    require([
+                if (!window.cssAttributes) {
+                    window.cssAttributes = {
+                        '*': 'all'
+                    };
+                }
+                require([
             TEMPLATE;
-
+                
+            /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
             foreach ($assets as $asset) {
-                $template = $this->getAssetTemplate(
-                    $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
-                    $this->addDefaultAttributes($this->getAssetContentType($asset), $attributes)
-                );
-
                 $assetUrl = $asset->getUrl();
                 $result .= "\n'require-css!" . $assetUrl ."',";
+                if ($attributes) {
+                    $currentAttributes = trim($attributes);
+                    $currentAttributes = str_replace('media="', '', $currentAttributes);
+                    $currentAttributes = str_replace('"', '', $currentAttributes);
+                    $cssAttributes[$assetUrl] = $currentAttributes;
+                }
             }
 
             $result .= <<<TEMPLATE
                     \n]);
+            TEMPLATE;
+            $result .= "\n window.cssAttributes = Object.assign({}, window.cssAttributes, " . json_encode($cssAttributes) . "); \n";
+            $result .= <<<TEMPLATE
                 </script>
             TEMPLATE;
         } catch (LocalizedException $e) {

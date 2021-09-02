@@ -1,10 +1,12 @@
 <?xml version="1.0" ?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
 	<default>
-		<dev>
-			<css>
+		<hawksama_performanceoptimization>
+			<general>
+                <enabled>1</enabled>
+                <minify_html>1</minify_html>
 				<requirejs_css>1</requirejs_css>
-			</css>
-		</dev>
+			</general>
+		</hawksama_performanceoptimization>
 	</default>
 </config>

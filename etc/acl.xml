@@ -6,7 +6,7 @@
 				<resource id="Magento_Backend::stores">
 					<resource id="Magento_Backend::stores_settings">
 						<resource id="Magento_Config::config">
-							<resource id="Hawksama_PerformanceOptimization::config_hawksama_PerformanceOptimization" title="dev"/>
+							<resource id="Hawksama_PerformanceOptimization::config_hawksama_performanceoptimization" title="hawksama_performanceoptimization"/>
 						</resource>
 					</resource>
 				</resource>

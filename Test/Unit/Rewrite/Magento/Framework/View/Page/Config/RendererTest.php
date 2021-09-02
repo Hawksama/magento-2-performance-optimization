@@ -1,5 +1,4 @@
 <?php
-
 namespace Hawksama\PerformanceOptimization\Test\Unit\Rewrite\Magento\Framework\View\Page\Config;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -96,7 +95,7 @@ class RendererTest extends TestCase
         $this->msApplicationTileImage = $this->createMock(\Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage::class);
         $this->helper = $this->createMock(\Hawksama\PerformanceOptimization\Helper\Data::class);
         $this->testObject = $this->objectManager->getObject(
-            \Hawksama\PerformanceOptimization\Rewrite\Magento\Framework\View\Page\Config\Renderer::class,
+        \Hawksama\PerformanceOptimization\Rewrite\Magento\Framework\View\Page\Config\Renderer::class,
             [
                 'pageConfig' => $this->pageConfig,
                 'assetMergeService' => $this->assetMergeService,
