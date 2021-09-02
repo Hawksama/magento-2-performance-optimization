@@ -6,11 +6,11 @@
  - [Installation](#markdown-header-installation)
  - [Configuration](#markdown-header-configuration)
  - [Specifications](#markdown-header-specifications)
- - [Attributes](#markdown-header-attributes)
+ - [Support](#markdown-header-support)
 
 
 ## Main Functionalities
-This module removes render-blocking CSS files and helps with Google Page Speed results by asynchronously loading CSS using RequireJS. <br />
+This module eliminates render-blocking CSS files and helps with Google Page Speed results by asynchronously loading CSS using RequireJS. <br />
 Extends the Magento 2.3.3 functionality CSS critical path to be compatible with the new asynchronously mode to make the first First Contentful Paint faster. <br />
 The production mode is required because in the developer mode the LESS path hints do not work.
 
@@ -40,25 +40,17 @@ The production mode is required because in the developer mode the LESS path hint
 
 ## Configuration
 
- - Module enabled by default.
+ - Module enabled by default. CSS critical path recommended.
+ - Stores -> Settings -> Configuration -> Advanced -> Developer -> CSS Settings -> RequireJS CSS
 
 ### Activate CSS critical path
 
- - To enable it run `bin/magento config:set 'dev/css/use_css_critical_path' 1;`
-
-
-### Production mode
- - To disable it run `php bin/magento config:set 'dev/css/requirejs_css' 0;`
-
-### Developer mode
- - Stores -> Settings -> Configuration -> Advanced -> Developer -> CSS Settings -> RequireJS CSS
-
+ - To enable it run `php bin/magento config:set 'dev/css/use_css_critical_path' 1;`
 
 ## Specifications
 
  - Helper
 	- Hawksama\PerformanceOptimization\Helper\Data
-
 
 
 ## Support
