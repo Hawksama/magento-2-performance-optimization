@@ -10,9 +10,13 @@
 
 
 ## Main Functionalities
-This module eliminates render-blocking CSS files and helps with Google Page Speed results by asynchronously loading CSS using RequireJS. <br />
-Extends the Magento 2.3.3 functionality CSS critical path to be compatible with the new asynchronously mode to make the first First Contentful Paint faster. <br />
-The production mode is required because in the developer mode the LESS path hints do not work.
+Google Page Speed optimizer.
+
+### Main features
+ - Eliminates render-blocking CSS files by asynchronously loading CSS using RequireJS. <br />
+ - Minifies the HTML without affecting KnockoutJs, RequireJs, jQuery or VanillaJs.
+ - Moves all script tags with either the `src` attribute or inline scripts that are loaded in the source page at the bottom of the page before closing `</body>` with the ability to skip some pages or controllers. <br />
+ - Adds custom `critical.css` file to improve `First Contentful Paint` score. Extends the Magento 2.3.3 functionality CSS critical path to be compatible with the new CSS asynchronously mode. <br />
 
 ## Installation
 \* = in production please use the `--keep-generated` option
@@ -39,16 +43,21 @@ The production mode is required because in the developer mode the LESS path hint
  - Flush the cache by running `php bin/magento cache:flush`
 
 ## Configuration
+ Module enabled by default. CSS critical path recommended.
 
  - Enabled (hawksama_performanceoptimization/general/enabled)
 
  - Minify Html (hawksama_performanceoptimization/general/minify_html)
 
  - RequireJS CSS (hawksama_performanceoptimization/general/requirejs_css)
- 
- - Module enabled by default. CSS critical path recommended.
 
- - Stores > Settings > Configuration > HAWKSAMA -> Performance Optimization -> General
+ - MoveJS to bottom Enabled (hawksama_performanceoptimization/movejs/enabled)
+
+ - MoveJS to bottom Exclude Controllers (hawksama_performanceoptimization/movejs/home_page)
+
+ - MoveJS to bottom Exclude Paths (hawksama_performanceoptimization/movejs/controller)
+ 
+ - Stores > Settings > Configuration > HAWKSAMA -> Performance Optimization
 
 ### Activate CSS critical path
 
@@ -61,5 +70,11 @@ The production mode is required because in the developer mode the LESS path hint
 
  - Plugin
 	- beforeSendResponse - Magento\Framework\App\Response\Http > Hawksama\PerformanceOptimization\Plugin\Frontend\Magento\Framework\App\Response\Http
+
+ - Observer
+	- controller_front_send_response_before > Hawksama\PerformanceOptimization\Observer\Frontend\Controller\FrontSendResponseBefore
+
+ - Block
+	- Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray > magento/config/block/system/config/form/field/fieldarray/abstractfieldarray.phtml
 ## Support
 - manue971@icloud.com

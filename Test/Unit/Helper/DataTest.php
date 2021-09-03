@@ -151,6 +151,48 @@ class DataTest extends TestCase
     /**
      * @return array
      */
+    public function dataProviderForTestIsJsDeferEnabled()
+    {
+        return [
+            'Testcase 1' => [
+                'prerequisites' => ['param' => 1],
+                'expectedResult' => ['param' => 1]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderForTestIsJsDeferEnabled
+     */
+    public function testIsJsDeferEnabled(array $prerequisites, array $expectedResult)
+    {
+        $this->assertEquals($expectedResult['param'], $prerequisites['param']);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForTestRegexMatchSimple()
+    {
+        return [
+            'Testcase 1' => [
+                'prerequisites' => ['param' => 1],
+                'expectedResult' => ['param' => 1]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderForTestRegexMatchSimple
+     */
+    public function testRegexMatchSimple(array $prerequisites, array $expectedResult)
+    {
+        $this->assertEquals($expectedResult['param'], $prerequisites['param']);
+    }
+
+    /**
+     * @return array
+     */
     public function dataProviderForTestIsModuleOutputEnabled()
     {
         return [

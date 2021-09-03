@@ -65,8 +65,8 @@ class Data extends AbstractHelper
     public function getConfigModule($configName = '', $value = null)
     {
         $values = $this->configModule;
-        
-        if (!$configName){
+
+        if (!$configName) {
             return $values;
         }
 
@@ -107,7 +107,6 @@ class Data extends AbstractHelper
      */
     public function getMode(): bool
     {
-        return true;
         switch ($this->_appState->getMode()) {
             case \Magento\Framework\App\State::MODE_DEFAULT:
             case \Magento\Framework\App\State::MODE_PRODUCTION:
@@ -115,8 +114,84 @@ class Data extends AbstractHelper
                 break;
             case \Magento\Framework\App\State::MODE_DEVELOPER:
             default:
-                return false;
+                if ($this->getConfigModule('general/enabled_developer_mode')):
+                    return true;
+                else :
+                    return false;
+                endif;
                 break;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isJsDeferEnabled($request)
+    {
+        if (!$this->getConfigModule('general/enabled')) {
+            return false;
+        }
+
+        $active = $this->getConfigModule('movejs/enabled');
+        if ($active != 1) {
+            return false;
+        }
+
+        $active = $this->getConfigModule('movejs/home_page');
+        if ($active == 1 && $request->getFullActionName() == 'cms_index_index') {
+            return false;
+        }
+
+        $module = $request->getModuleName();
+        $controller = $request->getControllerName();
+        $action = $request->getActionName();
+        if ($this->regexMatchSimple($this->getConfigModule('movejs/controller'), "{$module}_{$controller}_{$action}", 1))
+            return false;
+        if ($this->regexMatchSimple($this->getConfigModule('movejs/path'), $request->getRequestUri(), 2))
+            return false;
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function regexMatchSimple($regex, $matchTerm, $type)
+    {
+        if (!$regex) {
+            return false;
+        }
+
+        $rules = @unserialize($regex);
+        if (empty($rules)) {
+            return false;
+        }
+
+        foreach ($rules as $rule) {
+            $regex = trim($rule['defer'], '#');
+            if ($regex == '') {
+                continue;
+            }
+
+            if ($type == 1) {
+                $regexs = explode('_', $regex);
+                switch (count($regexs)) {
+                    case 1:
+                        $regex = $regex . '_index_index';
+                        break;
+                    case 2:
+                        $regex = $regex . '_index';
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            $regexp = '#' . $regex . '#';
+            if (@preg_match($regexp, $matchTerm)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

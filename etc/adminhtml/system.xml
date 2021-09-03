@@ -15,6 +15,10 @@
 					<comment/>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
+				<field id="enabled_developer_mode" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Enabled on Developer mode</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
 				<field id="minify_html" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 					<label>Minify Html</label>
 					<comment/>
@@ -22,10 +26,35 @@
 				</field>
 				<field id="requirejs_css" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
 					<label>RequireJS CSS</label>
-					<comment>Eliminates render-blocking CSS files and loads them using RequireJS.></comment>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment><![CDATA[Eliminates render-blocking CSS files and loads them using RequireJS.]]></comment>
 				</field>
 			</group>
-		</section>
+			
+            <group id="movejs" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Move JS to bottom</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="home_page" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Exclude Home Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Home page will be unaffected by defer js]]></comment>
+                </field>
+                <field id="controller" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Exclude Controllers</label>
+                    <frontend_model>Hawksama\PerformanceOptimization\Block\Adminhtml\Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment><![CDATA[Controllers will be unaffected by defer js. Use Like: {module}_{controller}_{action}.]]></comment>
+                </field>
+                <field id="path" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Exclude Paths</label>
+                    <frontend_model>Hawksama\PerformanceOptimization\Block\Adminhtml\Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                    <comment><![CDATA[Paths will be unaffected by defer js. Use Like: (Example: women/tops-women/hoodies-and-sweatshirts-women.html).]]></comment>
+                </field>
+            </group>
+        </section>
 	</system>
 </config>

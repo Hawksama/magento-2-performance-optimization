@@ -7,6 +7,9 @@
                 <minify_html>1</minify_html>
 				<requirejs_css>1</requirejs_css>
 			</general>
+			<movejs>
+                <enabled>1</enabled>
+			</movejs>
 		</hawksama_performanceoptimization>
 	</default>
 </config>
