@@ -75,6 +75,6 @@ Google Page Speed optimizer.
 	- controller_front_send_response_before > Hawksama\PerformanceOptimization\Observer\Frontend\Controller\FrontSendResponseBefore
 
  - Block
-	- Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray > magento/config/block/system/config/form/field/fieldarray/abstractfieldarray.phtml
+	- Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray
 ## Support
 - manue971@icloud.com
