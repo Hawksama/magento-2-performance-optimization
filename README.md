@@ -30,7 +30,7 @@ Google Page Speed optimizer.
 
 ### Type 2: Composer
 
- - Install the module composer by running `composer require hawksama/magento-2-performance-optimization
+ - Install the module composer by running `composer require hawksama/magento-2-performance-optimization`
  - enable and apply database updates by running `php bin/magento setup:upgrade`\*
  - compile the module by running `php bin/magento setup:di:compile`
  - Flush the cache by running `php bin/magento cache:flush`
