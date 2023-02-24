@@ -195,7 +195,10 @@ class Renderer extends \Magento\Framework\View\Page\Config\Renderer
                 $assetUrl = $asset->getUrl();
                 $jsCode .= "\n'require-css!" . $assetUrl . "',";
                 if ($attributes) {
-                    $cssAttributes[$assetUrl] = $attributes;
+                    $currentAttributes = trim($attributes);
+                    $currentAttributes = str_replace('media="', '', $currentAttributes);
+                    $currentAttributes = str_replace('"', '', $currentAttributes);
+                    $cssAttributes[$assetUrl] = $currentAttributes;
                 }
             }
 
