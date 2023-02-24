@@ -14,6 +14,9 @@ use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage;
 use Hawksama\PerformanceOptimization\Helper\Data;
+use Magento\Framework\App\RequestInterface;
+use \Magento\Framework\App\CacheInterface;
+use \Magento\Framework\Serialize\SerializerInterface;
 
 class Renderer extends \Magento\Framework\View\Page\Config\Renderer
 {
@@ -30,6 +33,12 @@ class Renderer extends \Magento\Framework\View\Page\Config\Renderer
         'woff',
         'woff2',
     ];
+    
+    /**
+     * @var int
+     * 3 days cache longevity
+     */
+    protected $cache_longevity = 259200;
 
     /**
      * @var Config
@@ -70,6 +79,21 @@ class Renderer extends \Magento\Framework\View\Page\Config\Renderer
      * @var Data
      */
     protected $helper;
+    
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+    /**
+     * @var CacheInterface
+     */
+    protected $cache;
+
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
 
     /**
      * @param Config $pageConfig
@@ -80,6 +104,9 @@ class Renderer extends \Magento\Framework\View\Page\Config\Renderer
      * @param \Psr\Log\LoggerInterface $logger
      * @param MsApplicationTileImage|null $msApplicationTileImage
      * @param \Hawksama\PerformanceOptimization\Helper\Data $helper
+     * @param RequestInterface $request
+     * @param CacheInterface $cache
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         Config $pageConfig,
@@ -89,10 +116,16 @@ class Renderer extends \Magento\Framework\View\Page\Config\Renderer
         \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger,
         MsApplicationTileImage $msApplicationTileImage = null,
-        Data $helper
+        Data $helper,
+        RequestInterface $request,
+        CacheInterface $cache,
+        SerializerInterface $serializer
     ) {
-        $this->_helper = $helper;
-        
+        $this->helper = $helper;
+        $this->request = $request;
+        $this->cache = $cache;
+        $this->serializer = $serializer;
+
         parent::__construct(
             $pageConfig,
             $assetMergeService,
@@ -112,20 +145,18 @@ class Renderer extends \Magento\Framework\View\Page\Config\Renderer
      */
     protected function renderAssetGroup(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
-        if(
-            $this->_helper->getMode() && 
-            $this->_helper->getConfigModule('general/enabled') && 
-            $this->_helper->getArea() &&
-            $this->_helper->getConfigModule('general/requirejs_css')
-        ) {
-            if ($group->getProperties()['content_type'] == 'css') {
+        $groupHtml = $this->renderAssetHtml($group);
+        if ($group->getProperties()['content_type'] == 'css'):
+            if (
+                $this->helper->getMode()
+                && $this->helper->getConfigModule('general/enabled')
+                && $this->helper->getArea()
+                && $this->helper->getConfigModule('general/requirejs_css')
+            ) {
                 $groupHtml = $this->renderAssetCssUsingRequireJs($group);
-            } else {
-                $groupHtml = $this->renderAssetHtml($group);
             }
-        } else {
-            $groupHtml = $this->renderAssetHtml($group);
-        }
+        endif;
+        
         $groupHtml = $this->processIeCondition($groupHtml, $group);
         return $groupHtml;
     }
@@ -138,46 +169,67 @@ class Renderer extends \Magento\Framework\View\Page\Config\Renderer
      */
     protected function renderAssetCssUsingRequireJs(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
-        $assets = $this->processMerge($group->getAll(), $group);
-        $attributes = $this->getGroupAttributes($group);
+        $cacheKey = 'render_asset_css_using_requirejs_' . md5($this->serializer->serialize($group->getAll())) . '_' . $this->getCacheId();
+        $cachedResult = $this->cache->load($cacheKey);
+        if ($cachedResult) {
+            return $this->serializer->unserialize($cachedResult);
+        }
 
-        $result = ''; 
-        $cssAttributes = [];
         try {
-            $result .= <<<TEMPLATE
+            $assets = $this->processMerge($group->getAll(), $group);
+            $attributes = $this->getGroupAttributes($group);
+            $cssAttributes = [];
+
+            $jsCode = ''; 
+            $jsCode .= <<<TEMPLATE
                 <script type="text/javascript">
-                if (!window.cssAttributes) {
-                    window.cssAttributes = {
-                        '*': 'all'
-                    };
-                }
-                require([
+                    if (!window.cssAttributes) {
+                        window.cssAttributes = {
+                            '*': 'all'
+                        };
+                    }
+                    require([
             TEMPLATE;
-                
-            /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
+
             foreach ($assets as $asset) {
                 $assetUrl = $asset->getUrl();
-                $result .= "\n'require-css!" . $assetUrl ."',";
+                $jsCode .= "\n'require-css!" . $assetUrl . "',";
                 if ($attributes) {
-                    $currentAttributes = trim($attributes);
-                    $currentAttributes = str_replace('media="', '', $currentAttributes);
-                    $currentAttributes = str_replace('"', '', $currentAttributes);
-                    $cssAttributes[$assetUrl] = $currentAttributes;
+                    $cssAttributes[$assetUrl] = $attributes;
                 }
             }
 
-            $result .= <<<TEMPLATE
-                    \n]);
-            TEMPLATE;
-            $result .= "\n window.cssAttributes = Object.assign({}, window.cssAttributes, " . json_encode($cssAttributes) . "); \n";
-            $result .= <<<TEMPLATE
-                </script>
-            TEMPLATE;
-        } catch (LocalizedException $e) {
+            $jsCode .= "\n]);";
+            $jsCode .= "\n window.cssAttributes = Object.assign({}, window.cssAttributes, " . json_encode($cssAttributes) . ");";
+            $jsCode .= "\n</script>";
+
+            $this->cache->save($this->serializer->serialize($jsCode), $cacheKey, [
+                $this->getPageCacheTag()
+            ], $this->cache_longevity);
+
+            return $jsCode;
+        } catch (\Exception $e) {
             $this->logger->critical($e);
-            $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
+            return $this->notFoundPage();
         }
-        return $result;
+    }
+
+    private function getCacheId()
+    {
+        return $this->request->getFullActionName();
+    }
+
+    private function getPageCacheTag()
+    {
+        return 'PAGE_' . $this->getCacheId();
+    }
+
+    private function notFoundPage()
+    {
+        return sprintf(
+            '<script>window.location.href="%s";</script>',
+            $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound'])
+        );
     }
 
     /**

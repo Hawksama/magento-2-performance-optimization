@@ -33,17 +33,17 @@ class Http extends \Magento\Framework\View\Element\Template
     /**
      * @var bool
      */
-	protected $compress_js = false;
+    protected $compress_js = false;
 
     /**
      * @var bool
      */
-	protected $info_comment = false;
+    protected $info_comment = false;
 
     /**
      * @var bool
      */
-	protected $remove_comments = false;
+    protected $remove_comments = false;
 
     /**
      * @var string
@@ -57,8 +57,8 @@ class Http extends \Magento\Framework\View\Element\Template
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->request  = $request;
-        $this->_helper   = $helper;
+        $this->request = $request;
+        $this->helper = $helper;
     }
 
     /**
@@ -67,13 +67,13 @@ class Http extends \Magento\Framework\View\Element\Template
      */
     public function beforeSendResponse(MagentoHttp $response)
     {
-        if (!$this->_helper->getConfigModule('general/enabled')) {
+        if (!$this->helper->getConfigModule('general/enabled')) {
             return;
         }
 
         $body = $response->getBody();
 
-        $minifyHtml    = $this->_helper->getConfigModule('general/minify_html');
+        $minifyHtml    = $this->helper->getConfigModule('general/minify_html');
         if ($minifyHtml) {
             $body = $this->minifyHtml($body);
         }

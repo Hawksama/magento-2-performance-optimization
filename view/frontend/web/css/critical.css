@@ -219,7 +219,7 @@ input[type=url] {
     right: 0;
     top: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, 1)
+    background: rgba(255, 255, 255, 1);
 }
 
 .loading-mask .loader>img {

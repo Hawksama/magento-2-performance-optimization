@@ -42,8 +42,8 @@ class Data extends AbstractHelper
         ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($context);
-        $this->_scopeConfig = $scopeConfig;
-        $this->_appState = $appState;
+        $this->scopeConfig = $scopeConfig;
+        $this->appState = $appState;
         $this->configModule = $this->getConfig(strtolower($this->_getModuleName()));
     }
 
@@ -53,10 +53,10 @@ class Data extends AbstractHelper
     public function getConfig($configName = '')
     {
         if ($configName) {
-            return $this->_scopeConfig->getValue($configName, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+            return $this->scopeConfig->getValue($configName, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         }
 
-        return $this->_scopeConfig;
+        return $this->scopeConfig;
     }
 
     /**
@@ -91,7 +91,7 @@ class Data extends AbstractHelper
      */
     public function getArea()
     {
-        switch ($this->_appState->getAreaCode()) {
+        switch ($this->appState->getAreaCode()) {
             case 'frontend':
                 return true;
                 break;
@@ -107,7 +107,7 @@ class Data extends AbstractHelper
      */
     public function getMode(): bool
     {
-        switch ($this->_appState->getMode()) {
+        switch ($this->appState->getMode()) {
             case \Magento\Framework\App\State::MODE_DEFAULT:
             case \Magento\Framework\App\State::MODE_PRODUCTION:
                 return true;

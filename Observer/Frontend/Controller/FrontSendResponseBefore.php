@@ -21,7 +21,7 @@ class FrontSendResponseBefore implements \Magento\Framework\Event\ObserverInterf
     public function __construct(
         Data $helper
     ) {
-        $this->_helper = $helper;
+        $this->helper = $helper;
     }
     /**
      * Execute observer
@@ -34,9 +34,9 @@ class FrontSendResponseBefore implements \Magento\Framework\Event\ObserverInterf
     ) {
         $request = $observer->getEvent()->getData('request');
         if (
-            !$this->_helper->getConfigModule('general/enabled') ||
-            !($this->_helper->getMode() && $this->_helper->getArea()) ||
-            !$this->_helper->isJsDeferEnabled($request)
+            !$this->helper->getConfigModule('general/enabled') ||
+            !($this->helper->getMode() && $this->helper->getArea()) ||
+            !$this->helper->isJsDeferEnabled($request)
         ) {
             return;
         }
